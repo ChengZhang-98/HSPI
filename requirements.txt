@@ -1,0 +1,17 @@
+datasets==2.20.0
+numpy==1.26.4
+tqdm==4.66.4
+matplotlib==3.9.0
+transformers==4.44.2
+colorlog==6.8.2
+scikit-learn
+accelerate
+hqq
+bitsandbytes
+optimum-quanto==0.2.4
+fire
+wandb
+nltk
+# may need to install manually
+torchao==0.5.0
+flash-attn==2.6.3
