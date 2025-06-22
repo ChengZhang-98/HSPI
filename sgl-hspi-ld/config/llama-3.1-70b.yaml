@@ -1,0 +1,11 @@
+dataset_root: "./data"
+svm_cfg:
+  max_iter: 1000
+truncate_first_n_tokens: null
+truncate_first_n_logits: null
+q_tags_to_remove: null
+q_tags_to_keep:
+  - "unsloth-Meta-Llama-3.1-70B-Instruct/*"
+q_tag_transform: null
+seed: 42
+save_dir: "svm/llama-3.1-70b"

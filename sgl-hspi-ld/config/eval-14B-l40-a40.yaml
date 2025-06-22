@@ -1,0 +1,8 @@
+dataset_root: "./data"
+svm_ckpt: "./svm/L40-A40_Qwen2.5-14B/svm_model"
+truncate_first_n_tokens: null
+truncate_first_n_logits: null
+q_tags_to_remove: null
+q_tags_to_keep: null
+q_tag_transform: null
+save_dir: null

@@ -5,13 +5,15 @@
 This code accompanies the paper [Hardware and Software Platform Inference](https://openreview.net/pdf?id=kdmjVF1iDO). Our method identifies the underlying GPU architecture and software stack of a (black-box) machine learning model solely based on its input–output behavior. We leverage the inherent differences of various GPU architectures and compilers to distinguish between different GPU types and software stacks. We evaluate HSPI against models served on real hardware and achieve between 83.9% and 100% accuracy in a white-box setting and up to 3× higher than random-guess accuracy in a black-box setting.
 
 ## Environment
+
 Just run: conda env create -f environment.yml
+
 - **Conda env:** `env.yaml`
 - **Pip requirements:** `requirements.txt`
 
 If you want to specifically differentiate and use different cuda versions, please set these in env.yaml. When doing border image generation across GPUs be careful to ensure that the compatible version of nccl are installed (best if the same version).
 
-## Experiments
+## Main Experiments
 
 ### HSPI-BI: Creating Border Images between quantization classes via PGD
 
@@ -27,44 +29,43 @@ When transferability checks are enabled (using the `--other-models` flags), the 
 python img_border_batched_quantization.py `<model_name>` `<dataset>` `<save_dir>` [options]
 ```
 
-* `<model_name>`: one of `vgg16`, `resnet18`, `resnet50`, `efficientnet_b0`, `densenet121`, `mobilenet_v2`, `mobilenet_v3_small`, `mobilenet_v3_large`
-* `<dataset>`: one of `cifar10`, `cifar100`, `imagenet`
-* `<save_dir>`: directory where checkpoints, border images, and logs will be saved
+- `<model_name>`: one of `vgg16`, `resnet18`, `resnet50`, `efficientnet_b0`, `densenet121`, `mobilenet_v2`, `mobilenet_v3_small`, `mobilenet_v3_large`
+- `<dataset>`: one of `cifar10`, `cifar100`, `imagenet`
+- `<save_dir>`: directory where checkpoints, border images, and logs will be saved
 
 ##### Key Options
 
-* `--method`: Engineering method; only `1-vs-1-pgd` is implemented (default: `1-vs-1-pgd`).
+- `--method`: Engineering method; only `1-vs-1-pgd` is implemented (default: `1-vs-1-pgd`).
 
-* **Fine-tuning**
+- **Fine-tuning**
 
-  * `--fine-tune-batch-size`: batch size for initial FP32 fine-tuning (default: `128`).
+  - `--fine-tune-batch-size`: batch size for initial FP32 fine-tuning (default: `128`).
   
+- **PGD Engineering**
 
-* **PGD Engineering**
+  - `--engineer-batch-size`: batch size for border-image crafting (use `1` to emulate single-image mode) (default: `32`).
+  - `--start-lr`, `--end-lr`: linear learning-rate schedule start and end values (default: `1e-3`, `1e-4`).
+  - `--num-iters`: number of PGD iterations per image (default: `400`).
+  - `--check-every`: integer or ratio to check for border images during PGD (default: ratio `None` which skips intermediate checks).
+  - `--noise-scale`: initial random noise scale added to source images (default: `0.01`).
 
-  * `--engineer-batch-size`: batch size for border-image crafting (use `1` to emulate single-image mode) (default: `32`).
-  * `--start-lr`, `--end-lr`: linear learning-rate schedule start and end values (default: `1e-3`, `1e-4`).
-  * `--num-iters`: number of PGD iterations per image (default: `400`).
-  * `--check-every`: integer or ratio to check for border images during PGD (default: ratio `None` which skips intermediate checks).
-  * `--noise-scale`: initial random noise scale added to source images (default: `0.01`).
+- **Quantization Tags**
 
-* **Quantization Tags**
+  - `--q-tags`: list of quantization schemes to evaluate (e.g. `fp32 bf16 fp16 mxint8 fp8-e3m4 fp8-e4m3 int8-dynamic`).
 
-  * `--q-tags`: list of quantization schemes to evaluate (e.g. `fp32 bf16 fp16 mxint8 fp8-e3m4 fp8-e4m3 int8-dynamic`).
+- **Transferability (optional)**
 
-* **Transferability (optional)**
+  - `--other-models`: list of other model names to test border-image transferability.
+  - `--other-model-ckpts`: corresponding checkpoint paths for the other models.
+  - `--other-model-tags`: tags for each of the other models (defaults to `--q-tags`).
 
-  * `--other-models`: list of other model names to test border-image transferability.
-  * `--other-model-ckpts`: corresponding checkpoint paths for the other models.
-  * `--other-model-tags`: tags for each of the other models (defaults to `--q-tags`).
+- **Miscellaneous**
 
-* **Miscellaneous**
-
-  * `--device`: computation device (e.g. `cuda`, `cpu`).
-  * `--seed`: random seed (default: `42`).
-  * `--overwrite` / `-ow`: overwrite existing `save_dir` if it exists.
-  * `--skip-q-test`: skip quantized-model accuracy evaluation.
-  * `--create-model-ckpt-only`: exit after saving the FP32 model checkpoint, without engineering border images.
+  - `--device`: computation device (e.g. `cuda`, `cpu`).
+  - `--seed`: random seed (default: `42`).
+  - `--overwrite` / `-ow`: overwrite existing `save_dir` if it exists.
+  - `--skip-q-test`: skip quantized-model accuracy evaluation.
+  - `--create-model-ckpt-only`: exit after saving the FP32 model checkpoint, without engineering border images.
 
 ##### Example
 
@@ -77,7 +78,9 @@ python img_border_batched_quantization.py resnet18 cifar10 results/BI_quant_resn
   --q-tags fp32 bf16 fp16 \
   --device cuda
 ```
+
 If transferability check to another model is required:
+
 ```bash
 python img_border_batched_quantization.py resnet18 cifar10 results/BI_quant_resnet18_transfer_resnet50 \
   --method 1-vs-1-pgd \
@@ -174,13 +177,13 @@ python img_logits_svm.py \
   --device cuda
 ```
 
-* **`--model-ckpt`**: Path to your model checkpoint (fine-tuned on CIFAR-10).
-* **`--save-dir`**: Where to store (and/or load)
+- **`--model-ckpt`**: Path to your model checkpoint (fine-tuned on CIFAR-10).
+- **`--save-dir`**: Where to store (and/or load)
   `uniform_logits_… .pth` and `uniform_y_labels_… .pth`.
-* **`--q-tags`**: Quantization schemes to compare.
-* **`--num-samples`**: Number of images per quantization tag.
-* **`--no-logits`**: How many logits make up one SVM example.
-* **`--eval-batch-size`, `--device`, `--num-workers`**: Standard DataLoader & compute settings.
+- **`--q-tags`**: Quantization schemes to compare.
+- **`--num-samples`**: Number of images per quantization tag.
+- **`--no-logits`**: How many logits make up one SVM example.
+- **`--eval-batch-size`, `--device`, `--num-workers`**: Standard DataLoader & compute settings.
 
 The script will:
 
@@ -207,11 +210,11 @@ python img_logits_svm_transferability.py \
   --device cuda
 ```
 
-* **`--model_ckpt1` / `--model_ckpt2`**:
+- **`--model_ckpt1` / `--model_ckpt2`**:
   Checkpoints for **train** and **test** models.
-* **`--logits_file1` / `--logits_file2`** (optional):
+- **`--logits_file1` / `--logits_file2`** (optional):
   Pre-computed `uniform_logits_…` files to reuse.
-* All other flags match `img_logits_svm.py`.
+- All other flags match `img_logits_svm.py`.
 
 This script will:
 
@@ -223,7 +226,7 @@ This script will:
 
 #### 3. `img_logits_svm_transferability_gpus.py`
 
-Extends the transferability test to distinguish not only between quantization schemes and model architectures, but also between **different GPU hardware**. You supply two (optionally different if transferability needs to be checked) model checkpoints and train an SVM on the bit-patterns of one GPU’s logits, then test on the other GPU’s logits. The logits from the two different GPU's can be prepared in advance by running logits_svm.py on each GPU and then sharing the produced logits and running this script pointing at these files. If the exact same model should be used to compute the logits on both GPUs, transfer the model between servers in advance. 
+Extends the transferability test to distinguish not only between quantization schemes and model architectures, but also between **different GPU hardware**. You supply two (optionally different if transferability needs to be checked) model checkpoints and train an SVM on the bit-patterns of one GPU’s logits, then test on the other GPU’s logits. The logits from the two different GPU's can be prepared in advance by running logits_svm.py on each GPU and then sharing the produced logits and running this script pointing at these files. If the exact same model should be used to compute the logits on both GPUs, transfer the model between servers in advance.
 
 **Usage**
 
@@ -241,3 +244,34 @@ python img_logits_svm_transferability_gpus.py \
   --device cuda:0
 ```
 
+## SGL experiments
+
+Scripts of HSPI-LD experiments for [SGL](https://docs.sglang.ai/index.html) can be found under [sgl-hspi-ld](/sgl-hspi-ld).
+This requires launching sgl server first before collecting logits.
+
+1. Please refer to SGL's docs to install SGL properly.
+
+2. Launch SGL server first. You may use SGL CLI args like `--tp 2`, `--dp 2`, `--attention-backend flashinfer` etc to enable tensor parallel, data parallel, specify kernel backend, etc.
+
+  ```bash
+  python -m sglang.launch_server --model-path meta-llama/Meta-Llama-3-8B-Instruct
+  ```
+
+3. Run the collect script to generate & save logits
+
+  ```bash
+  cd sgl-hspi-ld
+  # check usage
+  python collect.py collect --help
+  # pass a config file instead of specify args
+  python collect.py collect --config ./config --save_dir ./path/to/save/logits
+  ```
+
+4. Run the classifier to train an SVM to predict SW/HW stack.
+  
+  ```bash
+  # check CLI actions and usage 
+  python classify.py --help
+  # train svm
+  python classify.py train-svm ./path/to/saved-logits
+  ```

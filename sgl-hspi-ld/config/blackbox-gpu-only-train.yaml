@@ -1,0 +1,22 @@
+dataset_root: "./data"
+svm_cfg:
+  max_iter: 1000
+truncate_first_n_tokens: null
+truncate_first_n_logits: null
+q_tags_to_remove: null
+q_tags_to_keep:
+  - "Qwen-Qwen2.5-14B-Instruct/gpu-NVIDIA-L40_*_tensor-parallel-2_data-parallel-2_attn-backend-flashinfer_*"
+  - "Qwen-Qwen2.5-14B-Instruct/gpu-NVIDIA-A40_*_tensor-parallel-2_data-parallel-2_attn-backend-flashinfer_*"
+  - "google-gemma-2-9b-it/gpu-NVIDIA-A40_*_tensor-parallel-2_data-parallel-2_attn-backend-flashinfer_*"
+  - "google-gemma-2-9b-it/gpu-NVIDIA-L40_*_tensor-parallel-2_data-parallel-2_attn-backend-flashinfer_*"
+q_tag_transform:
+  "Qwen-Qwen2.5-14B-Instruct/gpu-NVIDIA-L40_dtype-float16_kv-cache-dtype-auto_tensor-parallel-2_data-parallel-2_attn-backend-flashinfer_speculative-alg-None": "gpu-NVIDIA-L40_tensor-parallel-2_data-parallel-2_attn-backend-flashinfer_speculative-alg-None"
+  "Qwen-Qwen2.5-14B-Instruct/gpu-NVIDIA-L40_dtype-bfloat16_kv-cache-dtype-auto_tensor-parallel-2_data-parallel-2_attn-backend-flashinfer_speculative-alg-None": "gpu-NVIDIA-L40_tensor-parallel-2_data-parallel-2_attn-backend-flashinfer_speculative-alg-None"
+  "Qwen-Qwen2.5-14B-Instruct/gpu-NVIDIA-A40_dtype-float16_kv-cache-dtype-auto_tensor-parallel-2_data-parallel-2_attn-backend-flashinfer_speculative-alg-None": "gpu-NVIDIA-A40_tensor-parallel-2_data-parallel-2_attn-backend-flashinfer_speculative-alg-None"
+  "Qwen-Qwen2.5-14B-Instruct/gpu-NVIDIA-A40_dtype-bfloat16_kv-cache-dtype-auto_tensor-parallel-2_data-parallel-2_attn-backend-flashinfer_speculative-alg-None": "gpu-NVIDIA-A40_tensor-parallel-2_data-parallel-2_attn-backend-flashinfer_speculative-alg-None"
+  "google-gemma-2-9b-it/gpu-NVIDIA-L40_dtype-float16_kv-cache-dtype-auto_tensor-parallel-2_data-parallel-2_attn-backend-flashinfer_speculative-alg-None": "gpu-NVIDIA-L40_tensor-parallel-2_data-parallel-2_attn-backend-flashinfer_speculative-alg-None"
+  "google-gemma-2-9b-it/gpu-NVIDIA-L40_dtype-bfloat16_kv-cache-dtype-auto_tensor-parallel-2_data-parallel-2_attn-backend-flashinfer_speculative-alg-None": "gpu-NVIDIA-L40_tensor-parallel-2_data-parallel-2_attn-backend-flashinfer_speculative-alg-None"
+  "google-gemma-2-9b-it/gpu-NVIDIA-A40_dtype-float16_kv-cache-dtype-auto_tensor-parallel-2_data-parallel-2_attn-backend-flashinfer_speculative-alg-None": "gpu-NVIDIA-A40_tensor-parallel-2_data-parallel-2_attn-backend-flashinfer_speculative-alg-None"
+  "google-gemma-2-9b-it/gpu-NVIDIA-A40_dtype-bfloat16_kv-cache-dtype-auto_tensor-parallel-2_data-parallel-2_attn-backend-flashinfer_speculative-alg-None": "gpu-NVIDIA-A40_tensor-parallel-2_data-parallel-2_attn-backend-flashinfer_speculative-alg-None"
+seed: 42
+save_dir: "svm/blackbox_gpu-only_L40-A40_Qwen2.5-14B-Gemma-2-9B"
