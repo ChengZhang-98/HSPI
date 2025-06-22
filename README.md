@@ -275,3 +275,7 @@ This requires launching sgl server first before collecting logits.
   # train svm
   python classify.py train-svm ./path/to/saved-logits
   ```
+
+### SGL HSPI-LD dataset
+
+You can find example logits collected by `collect.py` at [Cheng98/HSPI-SGL](https://huggingface.co/datasets/Cheng98/HSPI-SGL)
